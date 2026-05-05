@@ -55,6 +55,90 @@ if(isset($_POST["btnupdate"]))
     }
 // Update code end
 ?>
+<script>
+    function accountnumber_check(accountnumbertxt, optionname)
+        {
+            var accountnumber=document.getElementById(accountnumbertxt).value;
+            var bankid=document.getElementById("txtbank_id").value;
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() 
+            {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
+                {
+                    var response_value = xmlhttp.responseText.trim();
+                    
+                    if(response_value=="no")
+                    {
+                        
+                    }
+                    else
+                    {
+                        alert("This account number already exists. Please enter a different account number.");
+                        document.getElementById(accountnumbertxt).value = "";
+                    }
+                    
+                }
+            };
+            xmlhttp.open("GET", "ajaxpage.php?frompage=bidders_bank_account_no&ajax_account_no=" + accountnumber + "&ajax_bank_id=" + bankid + "&ajax_option=" + optionname, true);
+            xmlhttp.send();
+        }
+</script>
+<script>
+    function IBAN_no_check(ibannumbertxt, optionname)
+        {
+            var IBAN_no=document.getElementById(ibannumbertxt).value;
+            var bankid=document.getElementById("txtbank_id").value;
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() 
+            {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
+                {
+                    var response_value = xmlhttp.responseText.trim();
+                    
+                    if(response_value=="no")
+                    {
+                        
+                    }
+                    else
+                    {
+                        alert("This IBAN number already exists. Please enter a different IBAN number.");
+                        document.getElementById(ibannumbertxt).value = "";
+                    }
+                    
+                }
+            };
+            xmlhttp.open("GET", "ajaxpage.php?frompage=bidders_bank_IBAN_no&ajax_IBAN_no=" + IBAN_no + "&ajax_bank_id=" + bankid + "&ajax_option=" + optionname, true);
+            xmlhttp.send();
+        }
+</script>
+<script>
+    function SWIFT_no_check(swiftnumbertxt, optionname)
+        {
+            var SWIFT_no=document.getElementById(swiftnumbertxt).value;
+            var bankid=document.getElementById("txtbank_id").value;
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() 
+            {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
+                {
+                    var response_value = xmlhttp.responseText.trim();
+                    
+                    if(response_value=="no")
+                    {
+                        
+                    }
+                    else
+                    {
+                        alert("This swift number already exists. Please enter a different swift number.");
+                        document.getElementById(swiftnumbertxt).value = "";
+                    }
+                    
+                }
+            };
+            xmlhttp.open("GET", "ajaxpage.php?frompage=bidders_bank_SWIFT_no&ajax_SWIFT_no=" + SWIFT_no + "&ajax_bank_id=" + bankid + "&ajax_option=" + optionname, true);
+            xmlhttp.send();
+        }
+</script>
 <body>
     <?php
     if(isset($_GET["option"])) 
@@ -139,7 +223,7 @@ if(isset($_POST["btnupdate"]))
                                                                 <label class="login2 pull-right pull-right-pro">Bank Account Number</label>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtaccount_no" id="txtaccount_no" class="form-control" required />
+                                                                <input type="text" name="txtaccount_no" id="txtaccount_no" class="form-control" onblur="accountnumber_check('txtaccount_no', 'add')" required />
                                                             </div>
                                                             <!-- One Column End-->
                                                         </div>
@@ -184,28 +268,7 @@ if(isset($_POST["btnupdate"]))
                                                     </div>
                                                 <!-- One Row End-->
 
-                                                <!-- One Row Start-->
-                                                    <div class="form-group-inner">
-                                                        <div class="row">
-                                                            <!-- One Column Start-->
-                                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <label class="login2 pull-right pull-right-pro">IBAN Number</label>
-                                                            </div>
-                                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtIBAN_no" id="txtIBAN_no" class="form-control" required />
-                                                            </div>
-                                                            <!-- One Column End-->
-                                                            <!-- One Column Start-->
-                                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <label class="login2 pull-right pull-right-pro">Swift Code</label>
-                                                            </div>
-                                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtswift_code" id="txtswift_code" class="form-control" required />
-                                                            </div>
-                                                            <!-- One Column End-->                                                                
-                                                        </div>
-                                                    </div>
-                                                <!-- One Row End-->
+                                                
 
                                                 <!-- Button Start--> 
                                                     <div class="form-group-inner">
@@ -459,7 +522,7 @@ if(isset($_POST["btnupdate"]))
                                                                 <label class="login2 pull-right pull-right-pro">Bank Account Number</label>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtaccount_no" id="txtaccount_no" class="form-control" value="<?php echo $rowview['account_no']; ?>"  required />
+                                                                <input type="text" name="txtaccount_no" id="txtaccount_no" class="form-control" value="<?php echo $rowview['account_no']; ?>" onblur="accountnumber_check('txtaccount_no', 'edit')"  required />
                                                             </div>
                                                             <!-- <div>
                                                                   <input type="text" name="txtdepartment_id" id="txtdepartment_id" class="form-control" required /> 
@@ -517,7 +580,7 @@ if(isset($_POST["btnupdate"]))
                                                                 <label class="login2 pull-right pull-right-pro">IBAN Number</label>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtIBAN_no" id="txtIBAN_no" class="form-control" value="<?php echo $rowview['IBAN_no']; ?>"  required />
+                                                                <input type="text" name="txtIBAN_no" id="txtIBAN_no" class="form-control" value="<?php echo $rowview['IBAN_no']; ?>" onblur="IBAN_no_check('txtIBAN_no', 'edit')" required />
                                                             </div> 
                                                             <!-- One Column End-->
                                                             <!-- One Column Start-->
@@ -525,7 +588,7 @@ if(isset($_POST["btnupdate"]))
                                                                 <label class="login2 pull-right pull-right-pro">Swift Code</label>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtswift_code" id="txtswift_code" class="form-control" value="<?php echo $rowview['swift_code']; ?>"  required />
+                                                                <input type="text" name="txtswift_code" id="txtswift_code" class="form-control" value="<?php echo $rowview['swift_code']; ?>" onblur="SWIFT_no_check('txtswift_code', 'edit')" required />
                                                             </div>
                                                         <!-- </div>
                                                                   <input type="text" name="txtdepartment_id" id="txtdepartment_id" class="form-control" required /> 

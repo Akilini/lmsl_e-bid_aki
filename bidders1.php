@@ -41,7 +41,7 @@ function makeFileName($originalName)
 if (isset($_POST["btnsave"])) {
 
     $bidder_id                  = mysqli_real_escape_string($con, $_POST["txtbidder_id"]);
-    $company_name               = mysqli_real_escape_string($con, $_POST["txtcompany_name"]);
+    $company_name               = mysqli_real_escape_string($con, strtoupper($_POST["txtcompany_name"]));
     $address                    = mysqli_real_escape_string($con, $_POST["txtaddress"]);
     $mobile                     = mysqli_real_escape_string($con, $_POST["txtmobile"]);
     $email                      = mysqli_real_escape_string($con, $_POST["txtemail"]);
@@ -154,7 +154,7 @@ if (isset($_POST["btnupdate"])) {
 
     $bidder_id = mysqli_real_escape_string($con, $_POST["txtbidder_id"]);
 
-    $company_name             = mysqli_real_escape_string($con, $_POST["txtcompany_name"]);
+    $company_name             = mysqli_real_escape_string($con, strtoupper($_POST["txtcompany_name"]));
     $address                  = mysqli_real_escape_string($con, $_POST["txtaddress"]);
     $mobile                   = mysqli_real_escape_string($con, $_POST["txtmobile"]);
     $email                    = mysqli_real_escape_string($con, $_POST["txtemail"]);
@@ -328,7 +328,7 @@ if (isset($_GET["option"])) {
                                                     <label class="login2 pull-right pull-right-pro">Name of the Company</label>
                                                 </div>
                                                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-                                                    <input type="text" name="txtcompany_name" id="txtcompany_name" class="form-control" required />
+                                                    <input type="text" name="txtcompany_name" id="txtcompany_name" class="form-control" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase();" required />
                                                 </div>
                                             </div>
                                         </div>
@@ -649,7 +649,7 @@ if (isset($_GET["option"])) {
                                                     <label class="login2 pull-right pull-right-pro">Name of the Company</label>
                                                 </div>
                                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                    <input type="text" name="txtcompany_name" class="form-control" value="<?php echo $rowedit['company_name']; ?>" required />
+                                                    <input type="text" name="txtcompany_name" class="form-control" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase();" value="<?php echo $rowedit['company_name']; ?>" required />
                                                 </div>
                                             </div>
                                         </div>

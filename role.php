@@ -41,6 +41,34 @@ if(isset($_POST["btnupdate"]))
     }
 // Update code end
 ?>
+<script>
+    function rolename_check(rolenametxt, optionname)
+    {
+        var name = document.getElementById(rolenametxt).value;
+        var roleid = document.getElementById("txtroleid").value;
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() 
+        {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
+            {
+                var response_value = xmlhttp.responseText.trim();
+
+                if(response_value == "no")
+                {
+                    
+                }
+                else
+                {
+                    alert("This role name already exists. Please enter a different role name.");
+                    document.getElementById(rolenametxt).value = "";
+                }
+            }
+        };
+
+        xmlhttp.open("GET", "ajaxpage.php?frompage=role_name&ajax_name=" + name + "&ajax_role_id=" + roleid + "&ajax_option=" + optionname, true);
+        xmlhttp.send();
+    }
+</script>
 <body>
     <?php
     if(isset($_GET["option"])) 
@@ -91,7 +119,7 @@ if(isset($_POST["btnupdate"]))
                                                                 <label class="login2 pull-right pull-right-pro">Role Name</label>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtname" id="txtname" class="form-control" onkeypress="return isTextKey(event)" required />
+                                                                <input type="text" name="txtname" id="txtname" class="form-control" onkeypress="return isTextKey(event)" onblur="rolename_check('txtname', 'add')" required />
                                                             </div>
                                                             <!-- One Column End-->
                                                         </div>
@@ -275,7 +303,7 @@ if(isset($_POST["btnupdate"]))
                                                                 <label class="login2 pull-right pull-right-pro">Role Name</label>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtname" id="txtname" class="form-control" value="<?php echo $rowview['name']; ?>" required />
+                                                                <input type="text" name="txtname" id="txtname" class="form-control" value="<?php echo $rowview['name']; ?>"  onblur="rolename_check('txtname','edit')" required />
                                                             </div>
                                                             <!-- One Column End-->                                                          
                                                         </div>

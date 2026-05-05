@@ -1,18 +1,19 @@
 <?php
-if(!isset($_SESSION)){
+if(!isset($_SESSION))
+  {
     session_start();
-}
+  }
 if(isset($_SESSION["login_usertype"]))
-    {
-        //Your account has been accessed.
-        $system_usertype=$_SESSION["login_usertype"];
-        $system_user_id=$_SESSION["login_user_id"];
-        $system_user_name=$_SESSION["login_user_name"];
-    }
-    else{
-        //guest or public
-        $system_usertype="Guest";
-    }
+  {
+      //Your account has been accessed.
+      $system_usertype=$_SESSION["login_usertype"];
+      $system_user_id=$_SESSION["login_user_id"];
+      $system_user_name=$_SESSION["login_user_name"];
+  }
+  else{
+      //guest or public
+      $system_usertype="Guest";
+  }
 include("config.php");
 
 // login submit start
@@ -131,13 +132,13 @@ if(isset($_POST["btnlogin"]))
 </head>
 
 <body>
-    <!--[if lt IE 8]>
+  <!--[if lt IE 8]>
 		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 	<![endif]-->
 	<div class="error-pagewrap">
 		<div class="error-page-int">
 			<div class="text-center m-b-md custom-login">
-				<h3>PLEASE LOGIN TO e-LMSL</h3>
+				<h3>LOGIN TO e-LMSL</h3>
 			</div>
 			<div class="content-error">
 				<div class="hpanel">
@@ -155,7 +156,7 @@ if(isset($_POST["btnlogin"]))
                             </div>
                             <div class="checkbox login-checkbox">
                                 <label>
-										            <input type="checkbox" class="i-checks"> Remember me </label>
+										            <!-- <input type="checkbox" class="i-checks"> Remember me </label> -->
                             </div>
                             <center>
                               <button class="btn btn-danger btn-danger" type="reset" name="btnclear" id="btnclear" >Clear</button>
@@ -164,9 +165,6 @@ if(isset($_POST["btnlogin"]))
                         </form>
                     </div>
                 </div>
-			</div>
-			<div class="text-center login-footer">
-				<p>Copyright © 2018. All rights reserved. Template by <a href="https://colorlib.com/wp/templates/">Colorlib</a></p>
 			</div>
 		</div>   
     </div>

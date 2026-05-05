@@ -14,81 +14,123 @@ if(isset($_SESSION["login_usertype"]))
         $system_usertype="Guest";
     }
 include("config.php");
+
+$upload_dir = "product/briefly_specification_doc/";
+$upload_dir_fs = rtrim(__DIR__, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . str_replace("/", DIRECTORY_SEPARATOR, $upload_dir);
+
 //Insert code start
 if(isset($_POST["btnsave"]))
     {
         $product_id = $_POST["txtproduct_id"];
-
-    // File upload folder
-    $target_dir = "product/briefly_specification_doc/";
-
-    $file_name = "";
-    
-    if(isset($_FILES["txtbriefly_specification_doc"]) && $_FILES["txtbriefly_specification_doc"]["error"] == 0)
-    {
-        $file_name = basename($_FILES["txtbriefly_specification_doc"]["name"]);
-        $tmp_name = $_FILES["txtbriefly_specification_doc"]["tmp_name"];
-
-        // File extension
-        $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-        $allowed = array("pdf","jpg","jpeg","png");
-
-        // Validate file type
-        if(!in_array($ext,$allowed))
-        {
-            echo "<script>alert('Invalid file type');</script>";
-            exit();
-        }
-
-        // Move file
-        move_uploaded_file($tmp_name, $target_dir.$file_name);
-    }
-
-        $sqlinsert="INSERT INTO product (product_id,name,specification,briefly_specification_doc)
-                        VALUES('".mysqli_real_escape_string($con,$_POST["txtproduct_id"])."',
-                        '".mysqli_real_escape_string($con,$_POST["txtname"])."',
-                        '".mysqli_real_escape_string($con,$_POST["txtspecification"])."',
-                        '$file_name')"; 
-        $insertresult=mysqli_query($con,$sqlinsert) or die("SQL insert error".mysqli_error($con));
-        if($insertresult)
-            {
-                echo'<script> alert(" Record inserted successfully."); window.location.href="index.php?page=product.php&option=add" </script>';
-            }
-    }
-// Insert code end
-
-//Update code start
-if(isset($_POST["btnupdate"]))
-    {
-         $product_id = mysqli_real_escape_string($con, $_POST["txtproduct_id"]);
+        $file_briefly_specification_doc = "";
         
-
-        $file_name = $_FILES["txtbriefly_specification_doc"]["name"];
-        $tmp_name = $_FILES["txtbriefly_specification_doc"]["tmp_name"];
-
-        $target_dir = "product/briefly_specification_doc/";
-        $allowed = array("pdf","jpg","jpeg","png");
-
-        // Start update query
-        $sqlupdate="UPDATE product SET
-            name='".mysqli_real_escape_string($con,$_POST["txtname"])."',
-            specification='".mysqli_real_escape_string($con,$_POST["txtspecification"])."'";
-
-        // If new file uploaded
-        if($file_name != "")
+        if(isset($_FILES["txtbriefly_specification_doc"]) && $_FILES["txtbriefly_specification_doc"]["error"] == 0)
         {
-            $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+            $original_file = basename($_FILES["txtbriefly_specification_doc"]["name"]);
+            $tmp_name = $_FILES["txtbriefly_specification_doc"]["tmp_name"];
 
+            // File extension
+            $ext = strtolower(pathinfo($original_file, PATHINFO_EXTENSION));
+            $allowed = array("pdf","jpg","jpeg","png");
+
+            // Validate file type
             if(!in_array($ext,$allowed))
             {
                 echo "<script>alert('Invalid file type');</script>";
                 exit();
             }
 
-            move_uploaded_file($tmp_name, $target_dir.$file_name);
+            if(!is_dir($upload_dir_fs))
+            {
+                mkdir($upload_dir_fs, 0777, true);
+            }
 
-            $sqlupdate .= ", briefly_specification_doc='$file_name'";
+            $file_briefly_specification_doc = $product_id . "." . $ext;
+
+            // If already exists, delete (safety)
+            if(file_exists($upload_dir_fs.$file_briefly_specification_doc))
+            {
+                unlink($upload_dir_fs.$file_briefly_specification_doc);
+            }
+
+            // Move file
+            if(!move_uploaded_file($tmp_name, $upload_dir_fs.$file_briefly_specification_doc))
+            {
+                echo "<script>alert('File upload failed');</script>";
+                exit();
+            }
         }
+
+        $sqlinsert="INSERT INTO product (product_id,name,specification,briefly_specification_doc)
+                        VALUES('".mysqli_real_escape_string($con,$_POST["txtproduct_id"])."',
+                        '".mysqli_real_escape_string($con,$_POST["txtname"])."',
+                        '".mysqli_real_escape_string($con,$_POST["txtspecification"])."',
+                        '$file_briefly_specification_doc')"; 
+        $insertresult=mysqli_query($con,$sqlinsert) or die("SQL insert error".mysqli_error($con));
+        if($insertresult)
+            {
+                echo'<script> alert(" Record inserted successfully."); window.location.href="index.php?page=product.php&option=view" </script>';
+            }
+    }
+// Insert code end
+
+//Update code start
+if(isset($_POST["btnupdate"]))
+    
+{
+    $product_id = mysqli_real_escape_string($con, $_POST["txtproduct_id"]);
+    $allowed = array("pdf","jpg","jpeg","png");
+
+    // Step 1: Get existing file
+    $sqlget = "SELECT briefly_specification_doc FROM product WHERE product_id='$product_id'";
+    $resultget = mysqli_query($con, $sqlget);
+    $rowget = mysqli_fetch_assoc($resultget);
+    $old_file = $rowget["briefly_specification_doc"];
+
+    // Start update query
+    $sqlupdate="UPDATE product SET
+        name='".mysqli_real_escape_string($con,$_POST["txtname"])."',
+        specification='".mysqli_real_escape_string($con,$_POST["txtspecification"])."'";
+
+    // Step 2: Check new file upload
+    if(isset($_FILES["txtbriefly_specification_doc"]) && $_FILES["txtbriefly_specification_doc"]["name"] != "")
+    {
+        $original_file = $_FILES["txtbriefly_specification_doc"]["name"];
+        $tmp_name = $_FILES["txtbriefly_specification_doc"]["tmp_name"];
+
+        $ext = strtolower(pathinfo($original_file, PATHINFO_EXTENSION));
+       
+        if(!in_array($ext,$allowed))
+        {
+            echo "<script>alert('Invalid file type');</script>";
+            exit();
+        }
+
+        if(!is_dir($upload_dir_fs))
+        {
+            mkdir($upload_dir_fs, 0777, true);
+        }
+
+        // ✅ SAME NAME (overwrite)
+        $new_file = $product_id . "." . $ext;
+
+        // Delete old file if different extension
+        if(!empty($old_file) && file_exists($upload_dir_fs.$old_file))
+        {
+            unlink($upload_dir_fs.$old_file);
+        }
+
+        // Step 3: Upload new file
+        if(move_uploaded_file($tmp_name, $upload_dir_fs.$new_file))
+        {
+            $sqlupdate .= ", briefly_specification_doc='$new_file'";
+        }
+        else
+        {
+            echo "<script>alert('File upload failed');</script>";
+            exit();
+        }
+    }
 
         $sqlupdate .= " WHERE product_id='$product_id'";
 
@@ -311,14 +353,13 @@ if(isset($_POST["btnupdate"]))
                                                         </tr>
                                                         <tr>
                                                             <td><b>Briefly Specification Document</b></td>
-                                                            <td><?php echo $rowview["briefly_specification_doc"]; ?></td>
                                                             <td>
                                                                 <?php
                                                                 if(!empty($rowview["briefly_specification_doc"]))
                                                                 {
                                                                     ?>
-                                                                    <a href="product/briefly_specification_doc/<?php echo $rowview["briefly_specification_doc"]; ?>" target="_blank">
-                                                                        <button class="btn btn-primary" type="button">View</button>
+                                                                    <a href="<?php echo $upload_dir . rawurlencode($rowview["briefly_specification_doc"]); ?>" target="_blank">
+                                                                        <button class="btn btn-primary" type="button">View File</button>
                                                                     </a>
                                                                     <?php
                                                                 }
@@ -426,8 +467,8 @@ if(isset($_POST["btnupdate"]))
                                                                 {
                                                                     ?>
                                                                     Current File:
-                                                                    <a href="product/briefly_specification_doc/<?php echo $rowview['briefly_specification_doc']; ?>" target="_blank">
-                                                                        <?php echo $rowview['briefly_specification_doc']; ?>
+                                                                    <a href="<?php echo $upload_dir . rawurlencode($rowview['briefly_specification_doc']); ?>" target="_blank">
+                                                                        <?php echo "View File"; ?>
                                                                     </a>
                                                                     <?php
                                                                 }
@@ -479,9 +520,9 @@ if(isset($_POST["btnupdate"]))
                 $resultdelete=mysqli_query($con,$sqldelete) or die(mysqli_error($con));
 
                 // Delete file from folder
-                if($file != "" && file_exists("product/briefly_specification_doc/".$file))
+                if($file != "" && file_exists($upload_dir_fs.$file))
                 {
-                    unlink("product/briefly_specification_doc/".$file);
+                    unlink($upload_dir_fs.$file);
                 }
 
                 if($resultdelete)

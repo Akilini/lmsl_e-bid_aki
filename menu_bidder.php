@@ -1,79 +1,65 @@
 <ul class="metismenu" id="menu1">
-                        <li class="active">
-                            <a class="has-arrow" href="index.html">
-								   <span class="educate-icon educate-home icon-wrap"></span>
-								   <span class="mini-click-non">Education</span>
+                        <li class="home">
+							<a class="has-arrow" href="index.php">
+									<span class="educate-icon educate-home icon-wrap"></span>
+									<span class="mini-click-non">Home</span>
 								</a>
-                            <ul class="submenu-angle" aria-expanded="true">
-                                <li><a title="Dashboard v.1" href="index.html"><span class="mini-sub-pro">Dashboard v.1</span></a></li>
-                                <li><a title="Dashboard v.2" href="index-1.html"><span class="mini-sub-pro">Dashboard v.2</span></a></li>
-                                <li><a title="Dashboard v.3" href="index-2.html"><span class="mini-sub-pro">Dashboard v.3</span></a></li>
-                                <li><a title="Analytics" href="analytics.html"><span class="mini-sub-pro">Analytics</span></a></li>
-                                <li><a title="Widgets" href="widgets.html"><span class="mini-sub-pro">Widgets</span></a></li>
+							<!--<ul class="submenu-angle" aria-expanded="true">
+								<li><a title="Dashboard v.1" href="index.html"><span class="mini-sub-pro">Dashboard v.1</span></a></li>
+								<li><a title="Dashboard v.2" href="index-1.html"><span class="mini-sub-pro">Dashboard v.2</span></a></li>
+								<li><a title="Dashboard v.3" href="index-2.html"><span class="mini-sub-pro">Dashboard v.3</span></a></li>
+								<li><a title="Analytics" href="analytics.html"><span class="mini-sub-pro">Analytics</span></a></li>
+								<li><a title="Widgets" href="widgets.html"><span class="mini-sub-pro">Widgets</span></a></li>
+							</ul>-->
+						</li>
+                        <li>
+                            <a class="has-arrow" href="all-professors.html" aria-expanded="false"><span class="educate-icon educate-professor icon-wrap"></span> <span class="mini-click-non">Management</span></a>
+                            <ul class="submenu-angle" aria-expanded="false">
+								
+                                <li><a title="Add Professor" href="index.php?page=bidders.php&option=view"><span class="mini-sub-pro">Bidders</span></a></li>
+								<li><a title="Add Professor" href="index.php?page=bidders_bank.php&option=view"><span class="mini-sub-pro">Bidders Bank</span></a></li>
+								<li><a title="Add Professor" href="index.php?page=proprietor.php&option=view"><span class="mini-sub-pro">Proprietor</span></a></li>
+								<li><a title="Add Professor" href="index.php?page=product.php&option=view"><span class="mini-sub-pro">Product</span></a></li>
+                                <li><a title="Add Professor" href="index.php?page=awards.php&option=view"><span class="mini-sub-pro">Awards</span></a></li>                                
                             </ul>
                         </li>
-                        <li>
-                            <a title="Landing Page" href="events.html" aria-expanded="false"><span class="educate-icon educate-event icon-wrap sub-icon-mg" aria-hidden="true"></span> <span class="mini-click-non">Event</span></a>
-                        </li>
-                        <li>
-                            <a class="has-arrow" href="all-professors.html" aria-expanded="false"><span class="educate-icon educate-professor icon-wrap"></span> <span class="mini-click-non">Bidder</span></a>
+						<li>
+                            <a class="has-arrow" href="all-courses.html" aria-expanded="false"><span class="educate-icon educate-department icon-wrap"></span> <span class="mini-click-non">Bids</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="All Professors" href="index.php?page=staff.php&option=view"><span class="mini-sub-pro">Staff</span></a></li>
-                                <li><a title="All Professors" href="index.php?page=department.php&option=view"><span class="mini-sub-pro">Department</span></a></li>
-                                <li><a title="Add Professor" href="index.php?page=role.php&option=view"><span class="mini-sub-pro">Role</span></a></li>
-                                <li><a title="Add Professor" href="index.php?page=awards.php&option=view"><span class="mini-sub-pro">Awards</span></a></li>
-                                <li><a title="Add Professor" href="index.php?page=bidders.php&option=view"><span class="mini-sub-pro">Bidders</span></a></li>
-                                <li><a title="Add Professor" href="index.php?page=bidders_bank.php&option=view"><span class="mini-sub-pro">Bidders Bank</span></a></li>
                                 <li><a title="Add Professor" href="index.php?page=bids.php&option=view"><span class="mini-sub-pro">Bids</span></a></li>
                                 <li><a title="Add Professor" href="index.php?page=bids_evaluation.php&option=view"><span class="mini-sub-pro">Bids Evaluation</span></a></li>
                                 <li><a title="Add Professor" href="index.php?page=bids_product.php&option=view"><span class="mini-sub-pro">Bids Product</span></a></li>
                                 <li><a title="Add Professor" href="index.php?page=bids_securities.php&option=view"><span class="mini-sub-pro">Bids Securities</span></a></li>
                                 <li><a title="Add Professor" href="index.php?page=invoices.php&option=view"><span class="mini-sub-pro">Invoices</span></a></li>
                                 <li><a title="Add Professor" href="index.php?page=payments.php&option=view"><span class="mini-sub-pro">Payments</span></a></li>
-                                <li><a title="Add Professor" href="index.php?page=product.php&option=view"><span class="mini-sub-pro">Product</span></a></li>
-                                <li><a title="Add Professor" href="index.php?page=proprietor.php&option=view"><span class="mini-sub-pro">Proprietor</span></a></li>
-                                <li><a title="Add Professor" href="index.php?page=tender.php&option=view"><span class="mini-sub-pro">Tender</span></a></li>
+                            </ul>
+                        </li>
+						<li>
+                            <a class="has-arrow" href="all-courses.html" aria-expanded="false"><span class="educate-icon educate-department icon-wrap"></span> <span class="mini-click-non">Tender</span></a>
+                            <ul class="submenu-angle" aria-expanded="false">
+                                <li><a title="Add Professor" href="index.php?page=tender.php&option=view&type=Sales"><span class="mini-sub-pro">Tender Sales</span></a></li>
+                                <li><a title="Add Professor" href="index.php?page=tender.php&option=view&type=Procurement"><span class="mini-sub-pro">Tender Procurement</span></a></li>
                                 <li><a title="Add Professor" href="index.php?page=tender_product.php&option=view"><span class="mini-sub-pro">Tender Product</span></a></li>
-                                <li><a title="Add Professor" href="index.php?page=user.php&option=view"><span class="mini-sub-pro">User</span></a></li>
-                                <li><a title="Add Professor" href="logout.php"><span class="mini-sub-pro">Logout</span></a></li>
+                            </ul>
+                        </li>
+						<li>
+                            <a class="has-arrow" href="all-courses.html" aria-expanded="false"><span class="educate-icon educate-library icon-wrap"></span> <span class="mini-click-non">Report</span></a>
+                            <ul class="submenu-angle" aria-expanded="false">
+                                <li><a title="All Library" href="library-assets.html"><span class="mini-sub-pro">Bids</span></a></li>
+                                <li><a title="Add Library" href="add-library-assets.html"><span class="mini-sub-pro">Tender</span></a></li>
+                                <li><a title="Edit Library" href="edit-library-assets.html"><span class="mini-sub-pro">Product</span></a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="has-arrow" href="all-courses.html" aria-expanded="false"><span class="educate-icon educate-course icon-wrap"></span> <span class="mini-click-non">Profile</span></a>
+                            <ul class="submenu-angle" aria-expanded="false">
+                                <li><a title="All Courses" href="all-courses.html"><span class="mini-sub-pro">Profile</span></a></li>                                
                                 <li><a title="Add Professor" href="index.php?page=changepassword.php"><span class="mini-sub-pro">Change Password</span></a></li>
+								<li><a title="Add Professor" href="logout.php"><span class="mini-sub-pro">Logout</span></a></li>
                             </ul>
                         </li>
-                        <li>
-                            <a class="has-arrow" href="all-students.html" aria-expanded="false"><span class="educate-icon educate-student icon-wrap"></span> <span class="mini-click-non">Students</span></a>
-                            <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="All Students" href="all-students.html"><span class="mini-sub-pro">All Students</span></a></li>
-                                <li><a title="Add Students" href="add-student.html"><span class="mini-sub-pro">Add Student</span></a></li>
-                                <li><a title="Edit Students" href="edit-student.html"><span class="mini-sub-pro">Edit Student</span></a></li>
-                                <li><a title="Students Profile" href="student-profile.html"><span class="mini-sub-pro">Student Profile</span></a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a class="has-arrow" href="all-courses.html" aria-expanded="false"><span class="educate-icon educate-course icon-wrap"></span> <span class="mini-click-non">Courses</span></a>
-                            <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="All Courses" href="all-courses.html"><span class="mini-sub-pro">All Courses</span></a></li>
-                                <li><a title="Add Courses" href="add-course.html"><span class="mini-sub-pro">Add Course</span></a></li>
-                                <li><a title="Edit Courses" href="edit-course.html"><span class="mini-sub-pro">Edit Course</span></a></li>
-                                <li><a title="Courses Profile" href="course-info.html"><span class="mini-sub-pro">Courses Info</span></a></li>
-                                <li><a title="Product Payment" href="course-payment.html"><span class="mini-sub-pro">Courses Payment</span></a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a class="has-arrow" href="all-courses.html" aria-expanded="false"><span class="educate-icon educate-library icon-wrap"></span> <span class="mini-click-non">Library</span></a>
-                            <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="All Library" href="library-assets.html"><span class="mini-sub-pro">Library Assets</span></a></li>
-                                <li><a title="Add Library" href="add-library-assets.html"><span class="mini-sub-pro">Add Library Asset</span></a></li>
-                                <li><a title="Edit Library" href="edit-library-assets.html"><span class="mini-sub-pro">Edit Library Asset</span></a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a class="has-arrow" href="all-courses.html" aria-expanded="false"><span class="educate-icon educate-department icon-wrap"></span> <span class="mini-click-non">Departments</span></a>
-                            <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="Departments List" href="departments.html"><span class="mini-sub-pro">Departments List</span></a></li>
-                                <li><a title="Add Departments" href="add-department.html"><span class="mini-sub-pro">Add Departments</span></a></li>
-                                <li><a title="Edit Departments" href="edit-department.html"><span class="mini-sub-pro">Edit Departments</span></a></li>
-                            </ul>
-                        </li>
+                        
+                        <!--
                         <li>
                             <a class="has-arrow" href="mailbox.html" aria-expanded="false"><span class="educate-icon educate-message icon-wrap"></span> <span class="mini-click-non">Mailbox</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
@@ -146,5 +132,5 @@
                                 <li><a title="404 Page" href="404.html"><span class="mini-sub-pro">404 Page</span></a></li>
                                 <li><a title="500 Page" href="500.html"><span class="mini-sub-pro">500 Page</span></a></li>
                             </ul>
-                        </li>
+                        </li>-->
                     </ul>

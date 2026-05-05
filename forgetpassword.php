@@ -33,7 +33,7 @@ if(isset($_POST["btnrecover"])){
         //SMS send otp
         $user = "94769669804";
         $password = "3100";
-        $text = urlencode("Ypur verification code is".$verificationcode);
+        $text = urlencode("Your verification code is".$verificationcode);
         $to = "94".$rowmobile["mobile"]; //Receiver number
 
         $baseurl ="https://textit.biz/sendmsg";
@@ -148,7 +148,7 @@ else{
 	<div class="error-pagewrap">
 		<div class="error-page-int">
 			<div class="text-center m-b-md custom-login">
-				<h3>PLEASE LOGIN TO e-LMSL</h3>
+				<h3>LOGIN TO e-LMSL</h3>
 			</div>
 			<div class="content-error">
 				<div class="hpanel">
@@ -164,10 +164,9 @@ else{
                                 <input type="text" title="Please enter your password" placeholder="" required="" value="" name="txtmobile" id="txtmobile" class="form-control">
                                 <span class="help-block small"></span>
                             </div>
-                            <div class="checkbox login-checkbox">
-                                <label>
-										            <input type="checkbox" class="i-checks"> Remember me </label>
-                            </div>
+                            <!-- <div class="checkbox login-checkbox">
+                                <label>	<input type="checkbox" class="i-checks"> Remember me </label>
+                            </div> -->
                             <center>
                               <button class="btn btn-danger btn-danger" type="reset" name="btnclear" id="btnclear" >Clear</button>
                               <button class="btn btn-success loginbtn" type="submit" name="btnrecover" id="btnrecover">Recover</button>
@@ -176,9 +175,7 @@ else{
                     </div>
                 </div>
 			</div>
-			<div class="text-center login-footer">
-				<p>Copyright © 2018. All rights reserved. Template by <a href="https://colorlib.com/wp/templates/">Colorlib</a></p>
-			</div>
+			
 		</div>   
     </div>
     <!-- jquery

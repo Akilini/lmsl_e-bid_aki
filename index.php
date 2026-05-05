@@ -21,7 +21,7 @@ include("config.php");
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Dashboard V.1 | Kiaalap - Kiaalap Admin Template</title>
+    <title>LANKA MINERAL SANDS LIMITED</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- favicon
@@ -204,6 +204,106 @@ include("config.php");
     }
     </script>
     <script>
+    // International telephone validation
+    function internationalphone(phone_text_box_name)
+    {
+        var phone = document.getElementById(phone_text_box_name).value;
+        var pattern = /^\+[0-9]+$/; // + followed by digits only
+
+        if(phone == "")
+        {
+            // Allow empty (same as your style)
+        }
+        else
+        {
+            // Check format (+ and digits only)
+            if(!phone.match(pattern))
+            {
+                alert("Phone number must start with '+' and contain only digits.");
+                document.getElementById(phone_text_box_name).value = "";
+                document.getElementById(phone_text_box_name).focus();
+                return false;
+            }
+
+            // Check length between 12 and 17
+            if(phone.length < 12 || phone.length > 17)
+            {
+                alert("Phone number must be between 12 and 17 characters including '+'.");
+                document.getElementById(phone_text_box_name).value = "";
+                document.getElementById(phone_text_box_name).focus();
+                return false;
+            }
+
+            // Call next validation function
+            return international(phone_text_box_name);
+        }
+    }
+    </script>
+    <script>
+    // Additional validation (example: basic country code check)
+    function international(phone_text_box_name)
+    {
+        var str = document.getElementById(phone_text_box_name).value;
+
+        // Extract country code (first 2–4 digits after +)
+        var code = str.substring(1, 4);
+
+        // Optional: basic invalid check
+        if(code == "000")
+        {
+            alert("Invalid country code.");
+            document.getElementById(phone_text_box_name).value = "";
+            document.getElementById(phone_text_box_name).focus();
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    </script>   
+    <script> 
+    //check email db
+    function emailvalidation_check()
+    {
+        var enteremail=document.getElementById("txtemail").value;
+        xmlhttp.onreadystatechange = function() 
+        {
+            var response_value = xmlhttp.responseText.trim();
+            if(response_value=="YES")
+            {
+                alert("Sorry this email already exist");
+                document.getElementById("txtemail").value="";
+            }
+            else
+            {
+                emailvalidation();
+            }
+        };
+    }
+
+    //check email validation format
+    function emailvalidation()
+    {
+        var email=document.getElementById("txtemail").value;
+        var emailformat=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (email.match(emailformat))
+        {
+            
+        }
+        else if(email.length==0)
+        {
+            
+        }
+        else
+        {
+            alert("Email Address is Invalid");
+            document.getElementById("txtemail").value="";
+            document.getElementById("txtemail").focus()=true;
+        }		
+    }
+    </script> 
+    <!-- <script>
     //check email validation format
     function emailvalidation()
     {
@@ -224,7 +324,36 @@ include("config.php");
             document.getElementById("txt_email").focus()=true;
         }		
     }
-    </script>
+    </script> -->
+    <!-- <script>
+// check email validation format
+function emailvalidation()
+{
+    var email = document.getElementById("txt_email").value;
+
+    // Improved email regex
+    var emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    if(email == "")
+    {
+        // Allow empty (same as your style)
+    }
+    else
+    {
+        if(email.match(emailformat))
+        {
+            return true;
+        }
+        else
+        {
+            alert("Email Address is Invalid");
+            document.getElementById("txt_email").value = "";
+            document.getElementById("txt_email").focus();
+            return false;
+        }
+    }
+}
+</script> -->
     <script>
     //nic format validation
     function nicnumber()
@@ -328,7 +457,7 @@ include("config.php");
         <nav id="sidebar" class="">
             <div class="sidebar-header">
                 <a href="index.php"><img class="main-logo" src="img/logo/logo1.jpg" alt="" /></a>
-                <strong><a href="index.html"><img src="img/logo/logosn.png" alt="" /></a></strong>
+                <strong><a href="index.php"><img src="img/logo/logosn.png" alt="" /></a></strong>
             </div>
             <div class="left-custom-menu-adp-wrap comment-scrollbar">
                 <nav class="sidebar-nav left-sidebar-menu-pro">
@@ -388,17 +517,17 @@ include("config.php");
                                                 <li class="nav-item"><a href="#" class="nav-link">Bid Information</a>
                                                 </li>
                                                 <li class="nav-item dropdown res-dis-nn">
-                                                    <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">Project <span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span></a>
-                                                    <div role="menu" class="dropdown-menu animated zoomIn">
+                                                    <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">Tender<!-- <span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span>--></a>
+                                                    <!-- <div role="menu" class="dropdown-menu animated zoomIn">
                                                         <a href="#" class="dropdown-item">Documentation</a>
                                                         <a href="#" class="dropdown-item">Expert Backend</a>
                                                         <a href="#" class="dropdown-item">Expert FrontEnd</a>
                                                         <a href="#" class="dropdown-item">Contact Support</a>
-                                                    </div>
+                                                    </div> -->
                                                 </li>
-                                                <li class="nav-item"><a href="#" class="nav-link">e-Learning</a>
+                                                <li class="nav-item"><a href="e-learning.php" aria-expanded="false"class="nav-link">About US</a>
                                                 </li>
-                                                <li class="nav-item"><a href="contact_us.html" class="nav-link">Contact Us</a>
+                                                <li class="nav-item"><a href="contact_us.php" class="nav-link"> <span class="mini-sub-pro">Contact Us</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -406,6 +535,10 @@ include("config.php");
                                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                                         <div class="header-right-info">
                                             <ul class="nav navbar-nav mai-top-nav header-right-menu">
+											<?php
+											if($system_usertype!="Guest")
+											{
+											?>
                                                 <li class="nav-item dropdown">
                                                     <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><i class="educate-icon educate-message edu-chat-pro" aria-hidden="true"></i><span class="indicator-ms"></span></a>
                                                     <div role="menu" class="author-message-top dropdown-menu animated zoomIn">
@@ -527,25 +660,65 @@ include("config.php");
                                                         </div>
                                                     </div>
                                                 </li>
+											<?php
+											}
+											
+											
+											
+											if($system_usertype=="Bidders")
+											{
+												$sqlname="SELECT company_name FROM bidders WHERE bidder_id='$system_user_id'";
+												$resultname=mysqli_query($con,$sqlname) or die("sqlerror in sqlname ".mysqli_error($con));
+												$rowname=mysqli_fetch_assoc($resultname);
+												$visible_username=$rowname["company_name"];
+											}
+											else if($system_usertype=="Proprietor")
+											{
+												$sqlname="SELECT name FROM proprietor WHERE proprietor_id='$system_user_id'";
+												$resultname=mysqli_query($con,$sqlname) or die("sqlerror in sqlname ".mysqli_error($con));
+												$rowname=mysqli_fetch_assoc($resultname);
+												$visible_username=$rowname["name"];
+											}
+											else if($system_usertype=="Guest")
+											{
+												$visible_username="Guest";
+											}
+											else 
+											{
+												$sqlname="SELECT name FROM staff WHERE staff_id='$system_user_id'";
+												$resultname=mysqli_query($con,$sqlname) or die("sqlerror in sqlname ".mysqli_error($con));
+												$rowname=mysqli_fetch_assoc($resultname);
+												$visible_username=$rowname["name"];
+											}
+											?>
                                                 <li class="nav-item">
                                                     <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
 															<img src="img/product/pro4.jpg" alt="" />
-															<span class="admin-name">Prof.Anderson</span>
+															<span class="admin-name"><?php echo $visible_username; ?></span>
 															<i class="fa fa-angle-down edu-icon edu-down-arrow"></i>
 														</a>
                                                     <ul role="menu" class="dropdown-header-top author-log dropdown-menu animated zoomIn">
-                                                        <li><a href="#"><span class="edu-icon edu-home-admin author-log-ic"></span>My Account</a>
-                                                        </li>
+													<?php
+													if($system_usertype=="Guest")
+													{
+														echo '<li><a href="index.php?page=login.php"><span class="edu-icon edu-locked author-log-ic"></span>Log In</a>
+                                                        </li>';
+													}
+													else
+													{
+													?>
                                                         <li><a href="#"><span class="edu-icon edu-user-rounded author-log-ic"></span>My Profile</a>
                                                         </li>
-                                                        <li><a href="#"><span class="edu-icon edu-money author-log-ic"></span>User Billing</a>
+                                                        <li><a href="#"><span class="edu-icon edu-money author-log-ic"></span>Change Password</a>
                                                         </li>
-                                                        <li><a href="#"><span class="edu-icon edu-settings author-log-ic"></span>Settings</a>
+                                                        <li><a href="logout.php"><span class="edu-icon edu-locked author-log-ic"></span>Log Out</a>
                                                         </li>
-                                                        <li><a href="#"><span class="edu-icon edu-locked author-log-ic"></span>Log Out</a>
-                                                        </li>
+													<?php
+													}
+													?>
                                                     </ul>
                                                 </li>
+												<!--
                                                 <li class="nav-item nav-setting-open"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><i class="educate-icon educate-menu"></i></a>
 
                                                     <div role="menu" class="admintab-wrap menu-setting-wrap menu-setting-wrap-bg dropdown-menu animated zoomIn">
@@ -982,7 +1155,7 @@ include("config.php");
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </li>
+                                                </li>-->
                                             </ul>
                                         </div>
                                     </div>
@@ -1184,19 +1357,34 @@ include("config.php");
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="breadcome-list">
                                 <div class="row">
+									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <img src="system_photo/banner.png" width="100%">
+                                    </div>
+								</div>
+                                <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <div class="breadcome-heading">
+                                        <!--<div class="breadcome-heading">
                                             <form role="search" class="sr-input-func">
                                                 <input type="text" placeholder="Search..." class="search-int form-control">
                                                 <a href="#"><i class="fa fa-search"></i></a>
                                             </form>
-                                        </div>
-                                    </div>
+                                        </div>-->
+                                    </div>									
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                         <ul class="breadcome-menu">
-                                            <li><a href="#">Home</a> <span class="bread-slash">/</span>
+                                            <li><a href="index.php">Home</a> <span class="bread-slash">/</span>
                                             </li>
-                                            <li><span class="bread-blod">Dashboard V.1</span>
+											<?php
+											if(isset($_GET["page"]))
+											{
+											$pagename=explode(".",$_GET["page"]);
+											$visiblename=str_replace("_"," ",$pagename[0]);
+												}else
+												{
+													$visiblename="";
+												}
+											?>
+                                            <li><span class="bread-blod"><?php echo ucwords($visiblename); ?></span>
                                             </li>
                                         </ul>
                                     </div>

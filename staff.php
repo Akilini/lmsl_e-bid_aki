@@ -13,6 +13,8 @@ if(isset($_SESSION["login_usertype"]))
         //guest or public
         $system_usertype="Guest";
     }
+if($system_usertype!="Guest" && $system_usertype!="Proprietor" && $system_usertype!="Bidders")
+    {//authorized user
 include("config.php");
 //Insert code start
 if(isset($_POST["btnsave"]))
@@ -60,6 +62,62 @@ if(isset($_POST["btnupdate"]))
     }
 // Update code end
 ?>
+<script>
+    function nicnumber_check()
+        {
+            var nic=document.getElementById("txtnic").value;
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() 
+            {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
+                {
+                    var response_value = xmlhttp.responseText.trim();
+                    
+                    if(response_value=="no")
+                    {
+                        nicnumber();
+                    }
+                    else
+                    {
+                        alert("This NIC number already exists. Please enter a different NIC number.");
+                        document.getElementById("txtnic").value = "";
+                    }
+                    
+                }
+            };
+            xmlhttp.open("GET", "ajaxpage.php?frompage=staff_nic&ajax_nic=" + nic, true);
+            xmlhttp.send();
+        }
+</script>
+
+<script>
+    function phonenumber_check(mobiletxt, optionname)
+        {
+            var mobile=document.getElementById(mobiletxt).value;
+            var staffid=document.getElementById("txtstaffid").value;
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() 
+            {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
+                {
+                    var response_value = xmlhttp.responseText.trim();
+                    
+                    if(response_value=="no")
+                    {
+                        phonenumber(mobiletxt);
+                    }
+                    else
+                    {
+                        alert("This phone number already exists. Please enter a different phone number.");
+                        document.getElementById(mobiletxt).value = "";
+                    }
+                    
+                }
+            };
+            xmlhttp.open("GET", "ajaxpage.php?frompage=staff_mobile&ajax_mobile=" + mobile + "&ajax_staff_id=" + staffid + "&ajax_option=" + optionname, true);
+            xmlhttp.send();
+        }
+</script>
 <body>
     <?php
     if(isset($_GET["option"])) 
@@ -170,7 +228,7 @@ if(isset($_POST["btnupdate"]))
                                                                 <label class="login2 pull-right pull-right-pro">N.I.C</label>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtnic" id="txtnic" class="form-control" onblur=nicnumber() required />
+                                                                <input type="text" name="txtnic" id="txtnic" class="form-control" onblur="nicnumber_check('txtnic', 'add')" required />
                                                             </div>
                                                             <!-- One Column End-->
                                                             <!-- One Column Start-->
@@ -178,7 +236,7 @@ if(isset($_POST["btnupdate"]))
                                                                 <label class="login2 pull-right pull-right-pro">Mobile</label>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtmobile" id="txtmobile" class="form-control" onkeypress="return isNumberKey(event)" onblur="phonenumber('txtmobile')" required />
+                                                                <input type="text" name="txtmobile" id="txtmobile" class="form-control" onkeypress="return isNumberKey(event)" onblur="phonenumber_check('txtmobile', 'add')" required />
                                                             </div>
                                                             <!-- One Column End-->                                                                
                                                         </div>
@@ -332,8 +390,7 @@ if(isset($_POST["btnupdate"]))
                                                     <td><b>Mobile</b></td>
                                                     <td><?php echo $rowview["mobile"]; ?></td>
                                                     </tr>
-                                                </tbody>
-                                                
+                                                </tbody>                                                
                                             </table> 
                                             <a href="index.php?page=staff.php&option=view">
                                             <button class="btn btn-warning">Back</button>
@@ -464,7 +521,7 @@ if(isset($_POST["btnupdate"]))
                                                                 <label class="login2 pull-right pull-right-pro">N.I.C</label>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtnic" id="txtnic" class="form-control" value="<?php echo $rowview['nic']; ?>" onblur=nicnumber() required />
+                                                                <input type="text" name="txtnic" id="txtnic" class="form-control" value="<?php echo $rowview['nic']; ?>" onblur="nicnumber_check('txtnic', 'edit')" required />
                                                             </div>
                                                             <!-- One Column End-->
                                                             <!-- One Column Start-->
@@ -472,7 +529,7 @@ if(isset($_POST["btnupdate"]))
                                                                 <label class="login2 pull-right pull-right-pro">Mobile</label>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtmobile" id="txtmobile" class="form-control" value="<?php echo $rowview['mobile']; ?>" onkeypress="return isNumberKey(event)" onblur="phonenumber('txtmobile')" required />
+                                                                <input type="text" name="txtmobile" id="txtmobile" class="form-control" value="<?php echo $rowview['mobile']; ?>" onkeypress="return isNumberKey(event)" onblur="phonenumber_check('txtmobile','edit')" required />
                                                             </div>
                                                             <!-- One Column End-->                                                                
                                                         </div>
@@ -503,7 +560,7 @@ if(isset($_POST["btnupdate"]))
             }
             else if($_GET["option"]=="delete")
             {
-            $staffid=$_GET["pk_staff_id"];
+                $staffid=$_GET["pk_staff_id"];
                 $sqldelete="DELETE FROM staff WHERE staff_id='$staffid'";
                 $resultdelete=mysqli_query($con,$sqldelete) or die(mysqli_error($con));
 
@@ -515,7 +572,14 @@ if(isset($_POST["btnupdate"]))
                 echo'<script>alert("Record Deleted Successfully");window.location.href="index.php?page=staff.php&option=view";</script>';
             }    
             }
-
        }
        ?>
 </body>
+<?php
+    }
+    else
+    {//redirect to index.php if the user is not authorized to access this page
+        echo'<script>window.location.href="index.php";</script>';
+    }
+        ?>
+        

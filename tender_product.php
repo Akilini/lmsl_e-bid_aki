@@ -17,11 +17,25 @@ include("config.php");
 //Insert code start
 if(isset($_POST["btnsave"]))
     {
-        $sqlinsert="INSERT INTO tender_product (tender_id,product_id,available_qty,min_qty,delivery_term,bid_security_usd,bid_security_valid_days,perf_security_valid_days,comments)
+        $sql_tender_type="SELECT tender_type FROM tender WHERE tender_id='".$_POST["txttender_id"]."'";
+        $result_tender_type=mysqli_query($con, $sql_tender_type) or die ("SQL error in sql_tender_type".mysqli_error($con));
+        $row_tender_type=mysqli_fetch_assoc($result_tender_type);
+
+        if($row_tender_type["tender_type"]=="Procurement")
+        {
+            $avaliable_qty=$_POST["txtavaliable_qty"];
+            $min_qty=0;
+        }
+        else if($row_tender_type["tender_type"]=="Sales")
+        {
+            $avaliable_qty=$_POST["txtavaliable_qty"];
+            $min_qty=$_POST["txtmin_qty"];
+        }
+        $sqlinsert="INSERT INTO tender_product (tender_id,product_id,avaliable_qty,min_qty,delivery_term,bid_security_usd,bid_security_valid_days,perf_security_valid_days,comments)
                         VALUES('".mysqli_real_escape_string($con,$_POST["txttender_id"])."',
                         '".mysqli_real_escape_string($con,$_POST["txtproduct_id"])."',
-                        '".mysqli_real_escape_string($con,$_POST["txtavailable_qty"])."',
-                        '".mysqli_real_escape_string($con,$_POST["txtmin_qty"])."',
+                        '".mysqli_real_escape_string($con,$avaliable_qty)."',
+                        '".mysqli_real_escape_string($con,$min_qty)."',
                         '".mysqli_real_escape_string($con,$_POST["txtdelivery_term"])."',
                         '".mysqli_real_escape_string($con,$_POST["txtbid_security_usd"])."',
                         '".mysqli_real_escape_string($con,$_POST["txtbid_security_valid_days"])."',
@@ -30,7 +44,7 @@ if(isset($_POST["btnsave"]))
         $insertresult=mysqli_query($con,$sqlinsert) or die("SQL insert error".mysqli_error($con));
         if($insertresult)
             {
-                echo'<script> alert(" Record inserted successfully."); window.location.href="index.php?page=tender_product.php&option=add" </script>';
+                echo'<script> alert(" Record inserted successfully."); window.location.href="index.php?page=tender_product.php&option=add&tender_id=' . $_POST["txttender_id"] . '" </script>';
             }
     }
 // Insert code end
@@ -40,9 +54,24 @@ if(isset($_POST["btnupdate"]))
         $tender_id = $_POST["txttender_id"];
         $product_id = $_POST["txtproduct_id"];
 
+        $sql_tender_type="SELECT tender_type FROM tender WHERE tender_id='".$_POST["txttender_id"]."'";
+        $result_tender_type=mysqli_query($con, $sql_tender_type) or die ("SQL error in sql_tender_type".mysqli_error($con));
+        $row_tender_type=mysqli_fetch_assoc($result_tender_type);
+
+        if($row_tender_type["tender_type"]=="Procurement")
+        {
+            $avaliable_qty=$_POST["txtavaliable_qty"];
+            $min_qty=0;
+        }
+        else if($row_tender_type["tender_type"]=="Sales")
+        {
+            $avaliable_qty=$_POST["txtavaliable_qty"];
+            $min_qty=$_POST["txtmin_qty"];
+        }
+
         $sqlupdate="UPDATE tender_product SET
-        available_qty='".mysqli_real_escape_string($con,$_POST["txtavailable_qty"])."',
-        min_qty='".mysqli_real_escape_string($con,$_POST["txtmin_qty"])."',
+        avaliable_qty='".mysqli_real_escape_string($con,$avaliable_qty)."',
+        min_qty='".mysqli_real_escape_string($con,$min_qty)."',
         delivery_term='".mysqli_real_escape_string($con,$_POST["txtdelivery_term"])."',
         bid_security_usd='".mysqli_real_escape_string($con,$_POST["txtbid_security_usd"])."',
         bid_security_valid_days='".mysqli_real_escape_string($con,$_POST["txtbid_security_valid_days"])."',
@@ -54,17 +83,31 @@ if(isset($_POST["btnupdate"]))
 
         if($resultupdate)
         {
-            echo'<script>alert("Record Updated Successfully");window.location.href="index.php?page=tender_product.php&option=view"</script>';
+            echo'<script>alert("Record Updated Successfully");window.location.href="index.php?page=tender.php&option=fullview&pk_tender_id=' . $_POST["txttender_id"] . '"</script>';
         }
     }
 // Update code end
 ?>
+<script>
+    function assign_max_min_qty()
+    {
+        var avaliable_qty=document.getElementById("txtavaliable_qty").value;
+        document.getElementById("txtmin_qty").max=avaliable_qty;
+        document.getElementById("txtmin_qty").value=avaliable_qty;
+    }
+</script>
 <body>
     <?php
     if(isset($_GET["option"])) 
        {
         if($_GET["option"]=="add")
             {
+                $get_tender_id=$_GET["tender_id"];
+
+                $sql_tender_type="SELECT tender_type FROM tender WHERE tender_id='$get_tender_id'";
+                $result_tender_type=mysqli_query($con, $sql_tender_type) or die("SQL error in sql_tender_type".mysqli_error($con));
+                $row_tender_type=mysqli_fetch_assoc($result_tender_type);
+                
                 ?>
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -89,9 +132,9 @@ if(isset($_POST["btnupdate"]))
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                                 <select name="txttender_id" id="txttender_id" class="form-control" required>
-                                                                    <option value="select">Select</option>
+                                                                    
                                                                     <?php
-                                                                    $sql_load="SELECT tender_id FROM tender";
+                                                                    $sql_load="SELECT tender_id FROM tender WHERE tender_id='$get_tender_id'";
                                                                     $result_load=mysqli_query($con, $sql_load) or die ("SQL error in sql_load".mysqli_error($con));
                                                                     while ($row_load=mysqli_fetch_assoc($result_load))
                                                                         {
@@ -113,7 +156,12 @@ if(isset($_POST["btnupdate"]))
                                                                     $result_load=mysqli_query($con, $sql_load) or die ("SQL error in sql_load".mysqli_error($con));
                                                                     while ($row_load=mysqli_fetch_assoc($result_load))
                                                                         {
-                                                                            echo'<option value="'.$row_load["product_id"].'">'.$row_load["product_id"].'</option>';
+                                                                            $sql_check="SELECT * FROM tender_product WHERE tender_id='$get_tender_id' AND product_id='$row_load[product_id]'";
+                                                                            $result_check=mysqli_query($con, $sql_check) or die ("SQL error in  sql_check".mysqli_error($con));
+                                                                            if(mysqli_num_rows($result_check)==0)
+                                                                            {   
+                                                                            echo'<option value="'.$row_load["product_id"].'">'.$row_load["name"].' '.$row_load["product_id"].'</option>';
+                                                                            }
                                                                         }
                                                                     ?>
                                                                 </select>
@@ -128,18 +176,44 @@ if(isset($_POST["btnupdate"]))
                                                         <div class="row">
                                                             <!-- One Column Start-->
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <label class="login2 pull-right pull-right-pro">Available quantity</label>
+                                                                <label class="login2 pull-right pull-right-pro">
+                                                                    <?php
+                                                                    if($row_tender_type["tender_type"]=="Procurement")
+                                                                    {
+                                                                        echo "Required Quantity";
+                                                                    }
+                                                                    else if($row_tender_type["tender_type"]=="Sales")
+                                                                    {
+                                                                        echo "Available Quantity";
+                                                                    }
+                                                                    ?>
+                                                                </label>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtavailable_qty" id="txtavailable_qty" class="form-control" onkeypress="return isNumberKey(event)" required />
+                                                                <input type="text" name="txtavaliable_qty" id="txtavaliable_qty" class="form-control" onkeypress="return isNumberKey(event)" onblur="assign_max_min_qty()"  required />
                                                             </div>
                                                             <!-- One Column End-->
                                                              <!-- One Column Start-->
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                                <?php
+                                                                if($row_tender_type["tender_type"]=="Sales")
+                                                                    {
+                                                                ?>
                                                                 <label class="login2 pull-right pull-right-pro">Minimum quantity</label>
+                                                                <?php
+                                                                    }
+                                                                ?>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtmin_qty" id="txtmin_qty" class="form-control" onkeypress="return isNumberKey(event)" required />
+                                                                <?php
+                                                                if($row_tender_type["tender_type"]=="Sales")
+                                                                    {
+                                                                ?>
+
+                                                                <input type="number" name="txtmin_qty" id="txtmin_qty" class="form-control" min=1 onkeypress="return isNumberKey(event)" required />
+                                                                <?php
+                                                                    }   
+                                                                ?>
                                                             </div>
                                                             <!-- One Column End-->
                                                         </div>
@@ -168,7 +242,18 @@ if(isset($_POST["btnupdate"]))
                                                             <!-- One Column End-->
                                                             <!-- One Column Start-->
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <label class="login2 pull-right pull-right-pro">Bid Security(USD)</label>
+                                                                <label class="login2 pull-right pull-right-pro">Bid Security(
+                                                                <?php
+                                                                    if($row_tender_type["tender_type"]=="Procurement")
+                                                                    {
+                                                                        echo "LKR";
+                                                                    }
+                                                                else if($row_tender_type["tender_type"]=="Sales")
+                                                                    {
+                                                                        echo "USD";
+                                                                    }
+                                                                    ?>    
+                                                                )</label>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                                 <input type="text" name="txtbid_security_usd" id="txtbid_security_usd" class="form-control" required />
@@ -220,7 +305,7 @@ if(isset($_POST["btnupdate"]))
                                                     <div class="form-group-inner">
                                                         <div class="row">
                                                             <center>
-                                                                <a href="index.php?page=tender_product.php&option=view"><input type="button" name="btngoback" id="btngoback" class="btn btn-primary" value="Go Back" /></a> 
+                                                                <a href="index.php?page=tender.php&option=fullview&pk_tender_id=<?php echo $get_tender_id; ?>"><input type="button" name="btngoback" id="btngoback" class="btn btn-primary" value="Go Back" /></a> 
                                                                 <input type="reset" name="btnclear" id="btnclear" class="btn btn-danger" value="Clear" />
                                                                 <input type="Submit" name="btnsave" id="btnsave" class="btn btn-success" value="Save" /> 
                                                             </center>
@@ -260,7 +345,7 @@ if(isset($_POST["btnupdate"]))
                                             <tr>
                                                 <th data-field="tender_id ">Tender ID</th>
                                                 <th data-field="product_id" >Product ID</th>
-                                                <th data-field="available_qty" >Available Quantity</th>
+                                                <th data-field="avaliable_qty" >Available Quantity</th>
                                                 <th data-field="min_qty" >Minimum Quantity</th>
                                                 <th data-field="bid_security_usd">Bid Security</th>
                                                 <th data-field="action">Action</th>
@@ -269,7 +354,7 @@ if(isset($_POST["btnupdate"]))
                                         
                                         <tbody>
                                             <?php
-                                            $sqlview="SELECT tender_id ,product_id,available_qty,min_qty,bid_security_usd From tender_product";
+                                            $sqlview="SELECT tender_id ,product_id,avaliable_qty,min_qty,bid_security_usd From tender_product";
                                             $resultview=mysqli_query($con,$sqlview) or die("SQL view error".mysqli_error($con));
                                             while($rowview=mysqli_fetch_assoc($resultview))
                                                 {
@@ -280,7 +365,7 @@ if(isset($_POST["btnupdate"]))
                                                     echo'<tr>';
                                                     echo'<td>'.$rowview["tender_id"].'</td>';
                                                     echo'<td>'.$rowproductname["name"].'</td>';
-                                                    echo'<td>'.$rowview["available_qty"].'</td>';
+                                                    echo'<td>'.$rowview["avaliable_qty"].'</td>';
                                                     echo'<td>'.$rowview["min_qty"].'</td>';
                                                     echo'<td>'.$rowview["bid_security_usd"].'</td>';
                                                     echo'<td>';
@@ -312,13 +397,18 @@ if(isset($_POST["btnupdate"]))
                 WHERE tender_id='$pk_tender_id' 
                 AND product_id='$pk_product_id'";
 
-                $sqlview="SELECT * FROM tender_product WHERE tender_id='$pk_tender_id'";
+                $sqlview="SELECT * FROM tender_product WHERE tender_id='$pk_tender_id' AND product_id='$pk_product_id'";
                 $resultview=mysqli_query($con,$sqlview) or die("SQL error".mysqli_error($con));
                 $rowview=mysqli_fetch_assoc($resultview);
 
                 $sqlproduct="SELECT name FROM product WHERE product_id='$rowview[product_id]'";
                 $resultproduct=mysqli_query($con,$sqlproduct);
                 $rowproduct=mysqli_fetch_assoc($resultproduct);
+
+                $sql_tender_type = "SELECT tender_type FROM tender WHERE tender_id='$pk_tender_id'";
+                $result_tender_type = mysqli_query($con, $sql_tender_type) or die("SQL error: " . mysqli_error($con));
+                $row_tender_type = mysqli_fetch_assoc($result_tender_type);
+
             ?>
                     <div class="static-table-area">
                         <div class="container-fluid">
@@ -344,20 +434,48 @@ if(isset($_POST["btnupdate"]))
                                                         </tr>
 
                                                         <tr>
-                                                            <td><b>Available Quantity</b></td>
-                                                            <td><?php echo $rowview["available_qty"]; ?></td>
+                                                            <td><b>
+                                                                <?php
+                                                                if($row_tender_type["tender_type"]=="Procurement")
+                                                                {
+                                                                    echo "Required Quantity";
+                                                                }
+                                                                else if($row_tender_type["tender_type"]=="Sales")
+                                                                {
+                                                                    echo "Available Quantity";
+                                                                }
+                                                               ?>
+                                                            </b></td>
+                                                            <td><?php echo $rowview["avaliable_qty"]; ?></td>
                                                         </tr>
+                                                        <?php
+                                                        if($row_tender_type["tender_type"]=="Sales")
+                                                        {
+                                                            ?>
                                                         <tr>
                                                             <td><b>Minimum Quantity</b></td>
                                                             <td><?php echo $rowview["min_qty"]; ?></td>
                                                         </tr>
-
+                                                        <?php
+                                                        }
+                                                            ?>
                                                         <tr>
                                                             <td><b>Delivery Term</b></td>
                                                             <td><?php echo $rowview["delivery_term"]; ?></td>
                                                         </tr>
                                                         <tr>
-                                                            <td><b>Bid Security (USD)</b></td>
+                                                            <td><b>Bid Security (
+                                                            <?php
+                                                                if($row_tender_type["tender_type"]=="Procurement")
+                                                                {
+                                                                    echo "LKR";
+                                                                }
+                                                                else if($row_tender_type["tender_type"]=="Sales")
+                                                                {
+                                                                    echo "USD";
+                                                                }
+                                                                ?>    
+                                                            )</b></td>
                                                             <td><?php echo $rowview["bid_security_usd"]; ?></td>
                                                         </tr>
 
@@ -373,21 +491,16 @@ if(isset($_POST["btnupdate"]))
                                                             <td><b>Comments</b></td>
                                                             <td><?php echo $rowview["comments"]; ?></td>
                                                         </tr>
-                                                    </tbody>
-                                                    
+                                                    </tbody>                                                    
                                                 </table> 
-                                                <a href="index.php?page=tender_product.php&option=view">
-                                                <button class="btn btn-warning">Back</button>
-                                                </a>     
+                                                <a href="index.php?page=tender.php&option=fullview&pk_tender_id=<?php echo $rowview['tender_id']; ?>"><button class="btn btn-warning">Back</button></a>     
                                                 <?php
                                                 if(!isset($_GET['print']))
                                                 {
-                                                echo '<a href="print.php?tender_id='.$rowview['tender_id'].'" target="_blank">
-                                                <button class="btn btn-primary" name="btnprint" type="button" id="btnprint">Print</button>
-                                                </a>';
+                                                echo '<a href="print.php?tender_id='.$rowview['tender_id'].'" target="_blank"><button class="btn btn-primary" name="btnprint" type="button" id="btnprint">Print</button></a>';
                                                 }
                                                 ?>                             
-                                                </div>                                    
+                                            </div>                                    
                                         </div>
                                     </div>
                                 </div>
@@ -401,10 +514,17 @@ if(isset($_POST["btnupdate"]))
             else if($_GET["option"]=="edit")
             {
             $pk_tender_id=$_GET["pk_tender_id"];
+            $pk_product_id=$_GET["pk_product_id"];
 
-            $sqlview="SELECT * FROM tender_product WHERE tender_id='$pk_tender_id'";
+                $sqlview="SELECT * FROM tender_product 
+                WHERE tender_id='$pk_tender_id' 
+                AND product_id='$pk_product_id'";
             $resultview=mysqli_query($con,$sqlview);
             $rowview=mysqli_fetch_assoc($resultview);
+
+                $sql_tender_type = "SELECT tender_type FROM tender WHERE tender_id='$pk_tender_id'";
+                $result_tender_type = mysqli_query($con, $sql_tender_type) or die("SQL error: " . mysqli_error($con));
+                $row_tender_type = mysqli_fetch_assoc($result_tender_type);
             ?>
             <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -447,18 +567,45 @@ if(isset($_POST["btnupdate"]))
                                                         <div class="row">
                                                             <!-- One Column Start-->
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <label class="login2 pull-right pull-right-pro">Available Quantity</label>
+                                                                <label class="login2 pull-right pull-right-pro">
+                                                                <?php
+                                                                if($row_tender_type["tender_type"]=="Procurement")
+                                                                {
+                                                                    echo "Required Quantity";
+                                                                }
+                                                                else if($row_tender_type["tender_type"]=="Sales")
+                                                                {
+                                                                    echo "Available Quantity";
+                                                                }
+                                                                ?>
+
+                                                                </label>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtavailable_qty" id="txtavailable_qty" class="form-control" value="<?php echo $rowview['available_qty']; ?>" required />
+                                                                <input type="text" name="txtavaliable_qty" id="txtavaliable_qty" class="form-control" onblur="assign_max_min_qty()" value="<?php echo $rowview['avaliable_qty']; ?>" required />
                                                             </div>
                                                             <!-- One Column End--> 
                                                             <!-- One Column Start-->
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                                <?php
+                                                                if($row_tender_type["tender_type"]=="Sales")
+                                                                    {
+                                                                ?>
                                                                 <label class="login2 pull-right pull-right-pro">Minimum Quantity</label>
+                                                                <?php
+                                                                    }
+                                                                ?>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtmin_qty" id="txtmin_qty" class="form-control" value="<?php echo $rowview['min_qty']; ?>" required />
+                                                                <?php
+                                                                if($row_tender_type["tender_type"]=="Sales")
+                                                                    {
+                                                                ?>
+
+                                                                <input type="number" name="txtmin_qty" id="txtmin_qty" min="1" max="<?php echo $rowview['avaliable_qty']; ?>" class="form-control" value="<?php echo $rowview['min_qty']; ?>" required />
+                                                                <?php
+                                                                    }
+                                                                    ?>
                                                             </div>
                                                             <!-- One Column End-->                                                          
                                                         </div>
@@ -473,12 +620,33 @@ if(isset($_POST["btnupdate"]))
                                                                 <label class="login2 pull-right pull-right-pro">Delivery Term</label>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtdelivery_term" id="txtdelivery_term" class="form-control" value="<?php echo $rowview['delivery_term']; ?>" required />
+                                                                <select class="form-control custom-select-value" name="txtdelivery_term" id="txtdelivery_term" required >
+                                                                    
+                                                                    <option value="Head Office Rajagiriya" <?php echo ($rowview['delivery_term'] == 'Head Office Rajagiriya') ? 'selected' : ''; ?>>Head Office Rajagiriya</option>
+                                                                    <option value="Ex - works Pulmoddai" <?php echo ($rowview['delivery_term'] == 'Ex - works Pulmoddai') ? 'selected' : ''; ?>>Ex - works Pulmoddai</option>
+                                                                    <option value="Ex - works Trincomalee Warehouse at Trinco Harbor" <?php echo ($rowview['delivery_term'] == 'Ex - works Trincomalee Warehouse at Trinco Harbor') ? 'selected' : ''; ?>>Ex - works Trincomalee Warehouse at Trinco Harbor</option>
+                                                                    <option value="No Delivery Services" <?php echo ($rowview['delivery_term'] == 'No Delivery Services') ? 'selected' : ''; ?>>No Delivery Services</option>
+                                                                    <option value="Free Delivery" <?php echo ($rowview['delivery_term'] == 'Free Delivery') ? 'selected' : ''; ?>>Free Delivery</option>
+                                                                    <option value="Cash Delivery" <?php echo ($rowview['delivery_term'] == 'Cash Delivery') ? 'selected' : ''; ?>>Cash Delivery</option>
+																</select>
+                                                                <!-- <input type="text" name="txtdelivery_term" id="txtdelivery_term" class="form-control" value="<?php echo $rowview['delivery_term']; ?>" required /> -->
                                                             </div>
                                                             <!-- One Column End--> 
                                                             <!-- One Column Start-->
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <label class="login2 pull-right pull-right-pro">Bid Security USD</label>
+                                                                <label class="login2 pull-right pull-right-pro">Bid Security 
+                                                                    <?php
+                                                                if($row_tender_type["tender_type"]=="Procurement")
+                                                                {
+                                                                    echo "LKR";
+                                                                }
+                                                                else if($row_tender_type["tender_type"]=="Sales")
+                                                                {
+                                                                    echo "USD";
+                                                                }
+                                                                ?>
+
+                                                                </label>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                                 <input type="text" name="txtbid_security_usd" id="txtbid_security_usd" class="form-control" value="<?php echo $rowview['bid_security_usd']; ?>" required />
@@ -530,7 +698,7 @@ if(isset($_POST["btnupdate"]))
                                                     <div class="form-group-inner">
                                                         <div class="row">
                                                             <center>
-                                                                <a href="index.php?page=tender_product.php&option=view"><input type="button" name="btngoback" id="btngoback" class="btn btn-primary" value="Go Back" /></a> 
+                                                                <a href="index.php?page=tender.php&option=fullview&pk_tender_id=<?php echo $pk_tender_id; ?>"><input type="button" name="btngoback" id="btngoback" class="btn btn-primary" value="Go Back" /></a> 
                                                                 <input type="Submit" name="btnupdate" id="btnupdate" class="btn btn-success" value="Update" /> 
                                                             </center>
                                                         </div>
@@ -550,12 +718,13 @@ if(isset($_POST["btnupdate"]))
             else if($_GET["option"]=="delete")
             {
             $tender_id=$_GET["pk_tender_id"];
-                $sqldelete="DELETE FROM tender_product WHERE tender_id='$tender_id'";
+                $product_id=$_GET["pk_product_id"];
+                $sqldelete="DELETE FROM tender_product WHERE tender_id='$tender_id' AND product_id='$product_id'";
                 $resultdelete=mysqli_query($con,$sqldelete) or die(mysqli_error($con));
 
             if($resultdelete)
             {
-                echo'<script>alert("Record Deleted Successfully");window.location.href="index.php?page=tender_product.php&option=view";</script>';
+                echo'<script>alert("Record Deleted Successfully");window.location.href="index.php?page=tender.php&option=fullview&pk_tender_id=' . $tender_id . '";</script>';
             }    
             }
 

@@ -41,6 +41,34 @@ if(isset($_POST["btnupdate"]))
     }
 // Update code end
 ?>
+<script>
+    function departmentname_check(departmentnametxt, optionname)
+    {
+        var departmentname = document.getElementById(departmentnametxt).value;
+        var departmentid = document.getElementById("txtdepartment_id").value;
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() 
+        {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
+            {
+                var response_value = xmlhttp.responseText.trim();
+
+                if(response_value == "no")
+                {
+                    
+                }
+                else
+                {
+                    alert("This department name already exists. Please enter a different department name.");
+                    document.getElementById(departmentnametxt).value = "";
+                }
+            }
+        };
+
+        xmlhttp.open("GET", "ajaxpage.php?frompage=department_name&ajax_department_name=" + departmentname + "&ajax_department_id=" + departmentid + "&ajax_option=" + optionname, true);
+        xmlhttp.send();
+    }
+</script>
 <body>
     <?php
     if(isset($_GET["option"])) 
@@ -91,7 +119,7 @@ if(isset($_POST["btnupdate"]))
                                                                 <label class="login2 pull-right pull-right-pro">Department Name</label>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtdepartment_name" id="txtdepartment_name" class="form-control" required />
+                                                                <input type="text" name="txtdepartment_name" id="txtdepartment_name" class="form-control" onblur="departmentname_check('txtdepartment_name', 'add')" required />
                                                             </div>
                                                             <!-- One Column End-->                                                          
                                                         </div>
@@ -275,7 +303,7 @@ if(isset($_POST["btnupdate"]))
                                                                 <label class="login2 pull-right pull-right-pro">Department Name</label>
                                                             </div>
                                                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                                <input type="text" name="txtdepartment_name" id="txtdepartment_name" class="form-control" value="<?php echo $rowview['department_name']; ?>" required />
+                                                                <input type="text" name="txtdepartment_name" id="txtdepartment_name" class="form-control" value="<?php echo $rowview['department_name']; ?>" onblur="departmentname_check('txtdepartment_name','edit')" required />
                                                             </div>
                                                             <!-- One Column End-->                                                          
                                                         </div>
